@@ -4,8 +4,10 @@ import { UpdateMenuDto } from './dto/update-menu.dto';
 import { DRIZZLE } from 'src/drizzle/drizzle.module';
 import type { DrizzleDB } from 'src/drizzle/types/drizze';
 import { menus } from 'src/drizzle/schema';
-import { eq, gte, ilike, asc, desc, lte, and } from 'drizzle-orm';
+import { eq, gte, ilike, asc, desc, lte, and, sql } from 'drizzle-orm';
 import { MenuQueryDto } from './dto/menu-query.dto';
+import { GroupByCategoryQueryDto } from './dto/group-by-category.dto';
+import { SearchMenuQueryDto } from './dto/search.dto';
 
 @Injectable()
 export class MenuService {
@@ -96,5 +98,78 @@ export class MenuService {
 
   async remove(id: number) {
     await this.db.delete(menus).where(eq(menus.id, id));
+  }
+
+  async groupByCategory(query: GroupByCategoryQueryDto) {
+    const { mode, per_category } = query;
+
+    if(mode === "count") {
+      const rows = await this.db
+        .select({
+          category: menus.category,
+          count: sql<number>`count(*)`,
+        })
+        .from(menus)
+        .groupBy(menus.category)
+
+      const result: Record<string, number> = {};
+      rows.forEach(row => {
+        result[row.category] = Number(row.count);
+      });
+
+      return result;
+    }
+
+    if(mode === "list") {
+      const limit = per_category ? Number(per_category) : 5;
+
+      const items = await this.db.select().from(menus);
+
+      const parsed = items.map((m) => this.transformMenuData(m));
+
+      const grouped: Record<string, any[]> = {};
+
+      parsed.forEach((menu) => {
+        if (!grouped[menu.category]) grouped[menu.category] = [];
+        if (grouped[menu.category].length < limit) {
+          grouped[menu.category].push(menu);
+        }
+      });
+
+      return grouped;
+    }
+  }
+
+  async search(query: SearchMenuQueryDto) {
+    const { q } = query;
+
+    const page = query.page ? Number(query.page) : 1;
+    const perPage = query.per_page ? Number(query.per_page) : 10;
+    const offset = (page - 1) * perPage;
+
+    const totalRows = await this.db
+      .select({ count: sql<number>`COUNT(*)` })
+      .from(menus)
+      .where(ilike(menus.name, `%${q}%`));
+
+    const total = Number(totalRows[0].count);
+
+    const rows = await this.db
+      .select()
+      .from(menus)
+      .where(ilike(menus.name, `%${q}%`))
+      .limit(perPage)
+      .offset(offset);
+
+    const data = rows.map((m) => this.transformMenuData(m));
+
+    return {
+      data,
+      pagination: {
+        total,
+        page,
+        per_page: perPage,
+      },
+    };
   }
 }

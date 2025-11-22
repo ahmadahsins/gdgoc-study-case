@@ -3,6 +3,8 @@ import { CreateMenuDto } from './dto/create-menu.dto';
 import { UpdateMenuDto } from './dto/update-menu.dto';
 import { MenuService } from './menu.service';
 import { MenuQueryDto } from './dto/menu-query.dto';
+import { GroupByCategoryQueryDto } from './dto/group-by-category.dto';
+import { SearchMenuQueryDto } from './dto/search.dto';
 
 @Controller('menu')
 export class MenuController {
@@ -21,6 +23,17 @@ export class MenuController {
   async findAll(@Query() query: MenuQueryDto) {
     const data = await this.menuService.findAll(query);
     return { data };
+  }
+
+  @Get('group-by-category')
+  async groupByCategory(@Query() query: GroupByCategoryQueryDto) {
+    const data = await this.menuService.groupByCategory(query);
+    return { data };
+  }
+
+  @Get('search')
+  async search(@Query() query: SearchMenuQueryDto) {
+    return await this.menuService.search(query);
   }
 
   @Get(':id')
