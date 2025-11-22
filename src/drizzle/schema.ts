@@ -5,7 +5,7 @@ export const menus = pgTable("menus", {
   name: text("name").notNull(),
   category: text("category").notNull(),
   calories: integer("calories").notNull(),
-  price: decimal("price", { precision: 10, scale: 2 }).notNull(),
+  price: decimal("price", { precision: 10, scale: 2 }).$type<number>().notNull(),
   ingredients: jsonb("ingredients").notNull(),
   description: text("description").notNull(),
   created_at: timestamp("created_at").defaultNow().notNull(),
