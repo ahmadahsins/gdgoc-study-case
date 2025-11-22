@@ -8,6 +8,13 @@
       "when": 1763768171582,
       "tag": "0000_dear_morbius",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1763769502612,
+      "tag": "0001_jazzy_quasimodo",
+      "breakpoints": true
     }
   ]
 }
