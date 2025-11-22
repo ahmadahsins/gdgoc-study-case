@@ -1,7 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { CreateMenuDto } from './dto/create-menu.dto';
 import { UpdateMenuDto } from './dto/update-menu.dto';
 import { MenuService } from './menu.service';
+import { MenuQueryDto } from './dto/menu-query.dto';
 
 @Controller('menu')
 export class MenuController {
@@ -17,8 +18,8 @@ export class MenuController {
   }
 
   @Get()
-  async findAll() {
-    const data = await this.menuService.findAll();
+  async findAll(@Query() query: MenuQueryDto) {
+    const data = await this.menuService.findAll(query);
     return { data };
   }
 
