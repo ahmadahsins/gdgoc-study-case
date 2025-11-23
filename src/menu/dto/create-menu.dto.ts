@@ -4,5 +4,5 @@ export class CreateMenuDto {
   calories: number;
   price: number;
   ingredients: string[];
-  description: string;
+  description?: string;
 }

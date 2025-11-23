@@ -8,10 +8,11 @@ import { eq, gte, ilike, asc, desc, lte, and, sql } from 'drizzle-orm';
 import { MenuQueryDto } from './dto/menu-query.dto';
 import { GroupByCategoryQueryDto } from './dto/group-by-category.dto';
 import { SearchMenuQueryDto } from './dto/search.dto';
+import { GeminiService } from 'src/gemini/gemini.service';
 
 @Injectable()
 export class MenuService {
-  constructor(@Inject(DRIZZLE) private db: DrizzleDB) {}
+  constructor(@Inject(DRIZZLE) private db: DrizzleDB, private geminiService: GeminiService) {}
 
   // Helper method to transform menu data (convert price string to number)
   private transformMenuData(menu: any) {
@@ -22,10 +23,26 @@ export class MenuService {
   }
 
   async create(createMenuDto: CreateMenuDto) {
+    // If description is not provided, generate it using Gemini
+    let description = createMenuDto.description;
+
+    if(!description || description.trim() === '') {
+      description = await this.geminiService.generateMenuDescription(
+        createMenuDto.name,
+        createMenuDto.category,
+        createMenuDto.ingredients,
+        createMenuDto.calories,
+      );
+    }
+
     const [insertedMenu] = await this.db
       .insert(menus)
-      .values(createMenuDto)
+      .values({
+        ...createMenuDto,
+        description,
+      })
       .returning();
+
     return this.transformMenuData(insertedMenu);
   }
 
