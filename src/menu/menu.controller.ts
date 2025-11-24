@@ -5,6 +5,7 @@ import { MenuService } from './menu.service';
 import { MenuQueryDto } from './dto/menu-query.dto';
 import { GroupByCategoryQueryDto } from './dto/group-by-category.dto';
 import { SearchMenuQueryDto } from './dto/search.dto';
+import { RecomendationQueryDto } from './dto/recomendation-query.dto';
 
 @Controller('menu')
 export class MenuController {
@@ -34,6 +35,20 @@ export class MenuController {
   @Get('search')
   async search(@Query() query: SearchMenuQueryDto) {
     return await this.menuService.search(query);
+  }
+
+  @Get('recommendations') 
+  async getRecommendations(@Query() query: RecomendationQueryDto) {
+    const preferences = {
+        maxCalories: query.max_calories ? Number(query.max_calories) : undefined,
+        category: query.category,
+        dietaryRestrictions: query.dietary_restrictions 
+          ? query.dietary_restrictions.split(',').map(s => s.trim())
+          : undefined,
+        mood: query.mood,
+    };
+
+    return await this.menuService.getRecommendations(preferences);
   }
 
   @Get(':id')

@@ -46,6 +46,20 @@ export class MenuService {
     return this.transformMenuData(insertedMenu);
   }
 
+  async getRecommendations(preferences?: {
+    maxCalories?: number;
+    category?: string;
+    dietaryRestrictions?: string[];
+    mood?: string
+  }) {
+    const allMenus = await this.db.select().from(menus);
+    const transformedMenus = allMenus.map(menu => this.transformMenuData(menu));
+
+    const result = await this.geminiService.getMenuRecommendations(transformedMenus, preferences);
+
+    return result;
+  }
+
   async findAll(query: MenuQueryDto) {
     const { q, category, min_price, max_price, max_cal, page, per_page, sort } = query;
 
