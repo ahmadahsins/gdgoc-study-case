@@ -1,98 +1,344 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Menu Catalog API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A modern REST API for managing restaurant menu items with AI-powered features built with NestJS, Drizzle ORM, and Google Gemini AI.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 🚀 Features
 
-## Description
+### Core Features
+- ✅ **CRUD Operations** - Create, Read, Update, Delete menu items
+- ✅ **Advanced Filtering** - Filter by category, price range, calories
+- ✅ **Full-Text Search** - Search menu items by name
+- ✅ **Pagination & Sorting** - Efficient data retrieval
+- ✅ **Group by Category** - Organize menus by category
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+### AI-Powered Features (Google Gemini)
+- 🤖 **Auto-Generated Descriptions** - AI creates appetizing menu descriptions automatically
+- 🎯 **Smart Recommendations** - Personalized menu suggestions based on preferences
 
-## Project setup
+### Documentation
+- 📚 **Swagger/OpenAPI** - Interactive API documentation at `/api`
+- ✅ **Comprehensive Examples** - Real-world data examples in all endpoints
+
+## 🛠️ Tech Stack
+
+- **Framework**: NestJS 11
+- **Database**: PostgreSQL
+- **ORM**: Drizzle ORM
+- **AI**: Google Gemini API (@google/genai)
+- **Validation**: class-validator, class-transformer
+- **Documentation**: @nestjs/swagger
+- **Package Manager**: pnpm
+
+## 📋 Prerequisites
+
+- Node.js 18+
+- PostgreSQL database
+- Google Gemini API key ([Get one here](https://aistudio.google.com/apikey))
+- pnpm (recommended) or npm
+
+## 🔧 Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/ahmadahsins/gdgoc-study-case.git
+   cd gdgoc-study-case
+   ```
+
+2. **Install dependencies**
+   ```bash
+   pnpm install
+   ```
+
+3. **Setup environment variables**
+   
+   Create a `.env` file in the root directory:
+   ```env
+   # Database
+   DATABASE_URL=postgresql://user:password@localhost:5432/menu_catalog
+
+   # Google Gemini API
+   GEMINI_API_KEY=your_gemini_api_key_here
+
+   # Application
+   PORT=3000
+   ```
+
+4. **Run database migrations**
+   ```bash
+   pnpm drizzle-kit push
+   ```
+
+## 🚀 Running the Application
 
 ```bash
-$ pnpm install
+# Development mode with hot-reload
+pnpm run start:dev
+
+# Production mode
+pnpm run build
+pnpm run start:prod
 ```
 
-## Compile and run the project
+The application will be available at:
+- **API**: http://localhost:3000
+- **Swagger Documentation**: http://localhost:3000/api
+
+## 📚 API Documentation
+
+### Swagger UI
+
+Access the interactive API documentation at: **http://localhost:3000/api**
+
+The Swagger UI provides:
+- Complete endpoint documentation
+- Request/response examples with real data
+- Try-it-out functionality
+- Schema definitions
+
+### Available Endpoints
+
+#### Menu CRUD Operations
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/menu` | Create a new menu item (AI auto-description) |
+| GET | `/menu` | Get all menus with filtering & pagination |
+| GET | `/menu/:id` | Get a specific menu by ID |
+| PUT | `/menu/:id` | Update a menu item |
+| DELETE | `/menu/:id` | Delete a menu item |
+
+#### Search & Filtering
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/menu/search` | Full-text search by name |
+| GET | `/menu/group-by-category` | Group menus by category |
+
+#### AI Features
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/menu/recommendations` | Get AI-powered menu recommendations |
+
+### Query Parameters
+
+**GET /menu** supports:
+- `q` - Search query for menu name
+- `category` - Filter by category (food, drinks)
+- `min_price` - Minimum price filter
+- `max_price` - Maximum price filter
+- `max_cal` - Maximum calories filter
+- `page` - Page number (default: 1)
+- `per_page` - Items per page (default: 10)
+- `sort` - Sort field and order (e.g., `price:asc`, `calories:desc`)
+
+**Example:**
+```
+GET /menu?category=food&max_cal=600&sort=price:asc&page=1&per_page=10
+```
+
+## 🤖 AI Features Usage
+
+### 1. Auto-Generated Descriptions
+
+When creating a menu without a description, AI automatically generates one:
 
 ```bash
-# development
-$ pnpm run start
-
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
+POST /menu
+{
+  "name": "Ayam Geprek Spesial",
+  "category": "food",
+  "calories": 520,
+  "price": 18000,
+  "ingredients": ["chicken", "chili", "batter", "garlic"]
+  // description is optional - will be auto-generated
+}
 ```
 
-## Run tests
+**AI-Generated Response:**
+```json
+{
+  "message": "Menu created successfully",
+  "data": {
+    "id": 9,
+    "description": "Hand-pounded for ultimate flavor, our crispy battered chicken is expertly crushed with a vibrant sambal of fresh chili and aromatic garlic..."
+  }
+}
+```
+
+### 2. Smart Recommendations
+
+Get personalized menu recommendations based on preferences:
 
 ```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+GET /menu/recommendations?max_calories=600&category=food&mood=spicy
 ```
 
-## Deployment
+**AI Response:**
+```json
+{
+  "recommendations": [
+    {
+      "id": 9,
+      "name": "Ayam Geprek",
+      "category": "food",
+      "calories": 520,
+      "price": 18000
+    }
+  ],
+  "reasoning": "This spicy dish perfectly matches your preference for bold flavors while staying under your 600-calorie limit..."
+}
+```
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+## 📁 Project Structure
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+```
+src/
+├── app.module.ts           # Root module
+├── main.ts                 # Application entry point with Swagger setup
+├── drizzle/               # Database configuration
+│   ├── drizzle.module.ts
+│   ├── schema.ts          # Database schema
+│   └── types/
+├── gemini/                # AI integration
+│   ├── gemini.module.ts
+│   └── gemini.service.ts  # Gemini API service
+└── menu/                  # Menu feature module
+    ├── menu.module.ts
+    ├── menu.controller.ts # API endpoints
+    ├── menu.service.ts    # Business logic
+    └── dto/               # Data Transfer Objects
+        ├── create-menu.dto.ts
+        ├── update-menu.dto.ts
+        ├── menu-query.dto.ts
+        ├── search.dto.ts
+        ├── group-by-category.dto.ts
+        └── recomendation-query.dto.ts
+```
+
+## 🗄️ Database Schema
+
+**Menus Table:**
+```typescript
+{
+  id: serial (Primary Key)
+  name: text (Not Null)
+  category: text (Not Null)
+  calories: integer (Not Null)
+  price: decimal(10,2) (Not Null)
+  ingredients: jsonb (Not Null)
+  description: text (Not Null)
+  created_at: timestamp (Default: now())
+  updated_at: timestamp (Default: now())
+}
+```
+
+## 🧪 Testing
 
 ```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+# Unit tests
+pnpm run test
+
+# E2E tests
+pnpm run test:e2e
+
+# Test coverage
+pnpm run test:cov
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## 📦 Database Migrations
 
-## Resources
+```bash
+# Generate migration
+pnpm drizzle-kit generate
 
-Check out a few resources that may come in handy when working with NestJS:
+# Push schema to database
+pnpm drizzle-kit push
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+# Open Drizzle Studio (Database GUI)
+pnpm drizzle-kit studio
+```
 
-## Support
+## 🔐 Environment Variables
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `DATABASE_URL` | PostgreSQL connection string | ✅ Yes |
+| `GEMINI_API_KEY` | Google Gemini API key | ✅ Yes |
+| `PORT` | Application port | ❌ No (default: 3000) |
 
-## Stay in touch
+## 🚨 Common Issues & Solutions
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### Issue: Empty results when filtering
 
-## License
+**Problem:** Query returns empty array
+```
+GET /menu?category=food&max_cal=300
+```
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+**Solution:** Check if filter values match your data. For example, if all food items have >300 calories, increase `max_cal`:
+```
+GET /menu?category=food&max_cal=600
+```
+
+### Issue: AI features not working
+
+**Problem:** Auto-description or recommendations fail
+
+**Solution:** 
+1. Verify `GEMINI_API_KEY` is set in `.env`
+2. Check API key is valid at [Google AI Studio](https://aistudio.google.com/apikey)
+3. Ensure you have internet connection
+
+## 📝 Example Data
+
+Sample menu items in the database:
+
+```json
+[
+  {
+    "id": 9,
+    "name": "Ayam Geprek",
+    "category": "food",
+    "calories": 520,
+    "price": 18000,
+    "ingredients": ["chicken", "chili", "batter", "garlic"]
+  },
+  {
+    "id": 5,
+    "name": "Es Kopi Susu",
+    "category": "drinks",
+    "calories": 180,
+    "price": 25000,
+    "ingredients": ["coffee", "milk", "ice", "sugar"]
+  }
+]
+```
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the UNLICENSED License.
+
+## 👨‍💻 Author
+
+**Ahmad Ahsin**
+- GitHub: [@ahmadahsins](https://github.com/ahmadahsins)
+
+## 🙏 Acknowledgments
+
+- [NestJS](https://nestjs.com/) - Progressive Node.js framework
+- [Drizzle ORM](https://orm.drizzle.team/) - TypeScript ORM
+- [Google Gemini](https://ai.google.dev/) - AI API for smart features
+- [Swagger](https://swagger.io/) - API documentation
+
+---
+
+**Built with ❤️ using NestJS, Drizzle ORM, and Google Gemini AI**
