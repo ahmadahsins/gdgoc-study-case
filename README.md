@@ -267,6 +267,52 @@ pnpm drizzle-kit studio
 | `GEMINI_API_KEY` | Google Gemini API key | ✅ Yes |
 | `PORT` | Application port | ❌ No (default: 3000) |
 
+## 🚀 Deployment
+
+### Deploy to Render.com
+
+1. **Create a Web Service**
+   - Connect your GitHub repository
+   - Select "Web Service"
+
+2. **Configure Build Settings**
+   
+   **Build Command:**
+   ```bash
+   pnpm install && pnpm run build
+   ```
+   
+   **Start Command:**
+   ```bash
+   pnpm run start:prod
+   ```
+
+3. **Set Environment Variables**
+   ```
+   DATABASE_URL=your_postgresql_connection_string
+   GEMINI_API_KEY=your_gemini_api_key
+   PORT=3000
+   NODE_ENV=production
+   ```
+
+4. **Database Setup**
+   - Create a PostgreSQL database in Render
+   - Copy the Internal Database URL
+   - Add it as `DATABASE_URL` environment variable
+
+### Memory Optimization
+
+The project is configured with `NODE_OPTIONS='--max-old-space-size=512'` to work with Render's 512MB RAM limit on free tier.
+
+### Deployment Troubleshooting
+
+**Issue: Build timeout or memory errors**
+
+Solutions:
+1. Upgrade to Render Starter plan ($7/month) for 1GB RAM
+2. Optimize build process by removing unused dependencies
+3. Use production dependencies only: `pnpm install --prod`
+
 ## 🚨 Common Issues & Solutions
 
 ### Issue: Empty results when filtering
