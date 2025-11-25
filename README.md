@@ -313,6 +313,14 @@ Solutions:
 2. Optimize build process by removing unused dependencies
 3. Use production dependencies only: `pnpm install --prod`
 
+**Issue: "Cannot find module dist/main"**
+
+Solutions:
+1. Ensure build completed successfully - check build logs
+2. Verify `dist/` folder exists after build
+3. Check that `start:prod` uses correct path: `node dist/main.js`
+4. Render working directory should be project root
+
 ## 🚨 Common Issues & Solutions
 
 ### Issue: Empty results when filtering
