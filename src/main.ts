@@ -6,6 +6,9 @@ import { ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  // Enable CORS for Vercel
+  app.enableCors();
+
   // Enable validation pipes
   app.useGlobalPipes(new ValidationPipe({
     transform: true,
@@ -23,8 +26,25 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(process.env.PORT ?? 3000);
-  console.log(`Application is running on: http://localhost:${process.env.PORT ?? 3000}`);
-  console.log(`Swagger documentation available at: http://localhost:${process.env.PORT ?? 3000}/api`);
+  await app.init();
+  
+  return app;
 }
-bootstrap();
+
+// For Vercel serverless
+export default async (req, res) => {
+  const app = await bootstrap();
+  const server = app.getHttpAdapter().getInstance();
+  return server(req, res);
+};
+
+// For traditional server (local development)
+if (require.main === module) {
+  bootstrap().then(app => {
+    const port = process.env.PORT ?? 3000;
+    app.listen(port);
+    console.log(`Application is running on: http://localhost:${port}`);
+    console.log(`Swagger documentation available at: http://localhost:${port}/api`);
+  });
+}
+

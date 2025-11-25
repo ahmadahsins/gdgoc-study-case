@@ -269,57 +269,42 @@ pnpm drizzle-kit studio
 
 ## 🚀 Deployment
 
-### Deploy to Render.com
+### Deploy to Vercel (Recommended)
 
-1. **Create a Web Service**
-   - Connect your GitHub repository
-   - Select "Web Service"
+This project is optimized for Vercel serverless deployment.
 
-2. **Configure Build Settings**
-   
-   **Build Command:**
-   ```bash
-   pnpm install && pnpm run build
-   ```
-   
-   **Start Command:**
-   ```bash
-   pnpm run start:prod
-   ```
+**Quick Deploy:**
 
-3. **Set Environment Variables**
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/ahmadahsins/gdgoc-study-case)
+
+**Manual Deployment:**
+
+1. **Import Project to Vercel**
+   - Go to [vercel.com/new](https://vercel.com/new)
+   - Import your GitHub repository
+   - Configure build settings:
+     - Build Command: `pnpm install && pnpm run build`
+     - Output Directory: `dist`
+
+2. **Set Environment Variables**
    ```
-   DATABASE_URL=your_postgresql_connection_string
-   GEMINI_API_KEY=your_gemini_api_key
-   PORT=3000
+   DATABASE_URL=postgresql://user:pass@host:5432/db
+   GEMINI_API_KEY=your_gemini_api_key_here
    NODE_ENV=production
    ```
 
-4. **Database Setup**
-   - Create a PostgreSQL database in Render
-   - Copy the Internal Database URL
-   - Add it as `DATABASE_URL` environment variable
+3. **Deploy**
+   - Click "Deploy"
+   - Your API will be live at: `https://your-project.vercel.app`
 
-### Memory Optimization
+**📖 Detailed Guide:** See [VERCEL_DEPLOYMENT.md](./VERCEL_DEPLOYMENT.md) for complete walkthrough.
 
-The project is configured with `NODE_OPTIONS='--max-old-space-size=512'` to work with Render's 512MB RAM limit on free tier.
+### Database Options
 
-### Deployment Troubleshooting
-
-**Issue: Build timeout or memory errors**
-
-Solutions:
-1. Upgrade to Render Starter plan ($7/month) for 1GB RAM
-2. Optimize build process by removing unused dependencies
-3. Use production dependencies only: `pnpm install --prod`
-
-**Issue: "Cannot find module dist/main"**
-
-Solutions:
-1. Ensure build completed successfully - check build logs
-2. Verify `dist/` folder exists after build
-3. Check that `start:prod` uses correct path: `node dist/main.js`
-4. Render working directory should be project root
+- **Vercel Postgres** (Recommended) - Built-in, easy setup
+- **Neon** - Serverless Postgres with generous free tier
+- **Supabase** - Open-source Firebase alternative
+- **Railway** - Simple PostgreSQL hosting
 
 ## 🚨 Common Issues & Solutions
 
